@@ -22,4 +22,4 @@ jobs:
           git fetch --all
           git reset --hard origin/main
           npm install --save
-          pm2 restart dicordprofiles-bot
+          pm2 restart discordprofiles-bot
