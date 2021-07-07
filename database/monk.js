@@ -46,19 +46,13 @@ class Calls {
         const collection = db.get('users')
         return (await collection.insert({
             id: id,
-            thanks: {
-                total: 0,
-                users: []
-            },
             views: {
                 total: 0,
                 users: []
             },
             hearts: {
-                total: 0,
                 users: []
-            },
-
+            }
         }))
     }
 

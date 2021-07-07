@@ -21,11 +21,15 @@ class Logger {
         console.log(this.prefix + ' ' + chalk.yellow('[EVENT]') + ' ' + args.join(' '))
     }
 
+    static error(...args) {
+        args = this.formatInput(args)
+        console.log(this.prefix + ' ' + chalk.red('[ERROR]') + ' ' + args.join(' '))
+    } 
+
     static info(...args) {
         args = this.formatInput(args)
         console.log(this.prefix + ' ' + chalk.cyan('[>]') + ' ' + args.join(' '))
     } 
-
 }
 
 module.exports = Logger;

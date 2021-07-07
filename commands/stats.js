@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
     .setColor('#88E595')
     .setFooter(user.id)
     .setTimestamp()
-    //if ()
+    if (userDB.views.total > 100) embed.addField('🔥 Trending', `This profile has over 100+ views!`)
 
     let heart_users = userDB.hearts.users
 
@@ -36,11 +36,17 @@ exports.run = async (client, message, args) => {
     .setLabel(userDB.views.total + ' views')
     .setDisabled()
 
+    let comment = new MessageButton()
+    .setStyle('blurple')
+    .setID('comment')
+    .setEmoji('💬')
+    .setLabel('2')
+    
     let reload = new MessageButton()
     .setStyle('gray')
     .setID('reload')
     .setEmoji('861934606956888064')
-    message.channel.send({embed, buttons: [hearts, views, reload]})
+    message.channel.send({embed, buttons: [hearts, comment, views, reload]})
 };
 
 exports.help = {
