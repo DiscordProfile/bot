@@ -19,6 +19,7 @@ exports.run = async (client, message, args) => {
     .setColor('#fd5392')
     .setFooter(user.id)
     .setTimestamp()
+    .addField('Under beta', 'The bot is currently in beta. Report bugs and feature requests here: https://discord.gg/aaXK6FFKhg')
     if (userDB.views.total > 100) embed.addField('🔥 Trending', `This profile has over 100+ views!`)
 
     let heart_users = userDB.hearts.users
@@ -33,7 +34,7 @@ exports.run = async (client, message, args) => {
     .setStyle('gray')
     .setID('views')
     .setEmoji('👀')
-    .setLabel(userDB.views.total + ' views')
+    .setLabel(userDB.views.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' views')
     .setDisabled()
 
     let comment = new MessageButton()
