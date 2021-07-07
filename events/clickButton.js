@@ -4,6 +4,7 @@ const { MessageButton, MessageActionRow, MessageMenuOption, MessageMenu } = requ
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 
 module.exports = async (client, button) => {
+    if(!button.message.embeds[0]) return;
     try {
         const userProfile = client.users.cache.get(button.message.embeds[0].footer.text);
         let userProfileDB = await Calls.getUser(userProfile.id)
@@ -89,10 +90,12 @@ module.exports = async (client, button) => {
 
             if (heartUsers.includes(button.clicker.user.id)) {
                 // remove the heart
+                client.channels.cache.get('862259496108425226').send(`<3 <@${userClicker.id}> unhearted <@${userProfile.id}>.`)
                 await updateUser(userProfile, 'hearts.users', userClicker, false)
                 await updateEmbed(hearts_unliked)
             } else {
                 // add the heart
+                client.channels.cache.get('862259496108425226').send(`<3 <@${userClicker.id}> hearted <@${userProfile.id}>.`)
                 await updateUser(userProfile, 'hearts.users', userClicker, true)
                 await updateEmbed(hearts_liked)
             }
