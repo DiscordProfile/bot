@@ -9,6 +9,7 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "dateformat": "^4.5.1",
     "discord-buttons": "^4.0.0",
     "discord.js": "^12.2.0",

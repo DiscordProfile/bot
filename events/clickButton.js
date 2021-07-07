@@ -11,6 +11,7 @@ module.exports = async (client, button) => {
         const userClicker = button.clicker;
 
         let heartUsers = await userProfileDB.hearts.users
+        let comment_users = userProfileDB.comments.comments
 
         let hearts = new MessageButton()
             .setStyle('gray')
@@ -36,6 +37,12 @@ module.exports = async (client, button) => {
             .setEmoji('👀')
             .setLabel(userProfileDB.views.total + ' views')
             .setDisabled()
+
+        let comments = new MessageButton()
+            .setStyle('blurple')
+            .setID('comment')
+            .setEmoji('💬')
+            .setLabel(await comment_users.length)
 
         let reload = new MessageButton()
             .setStyle('gray')
@@ -99,6 +106,61 @@ module.exports = async (client, button) => {
                 await updateUser(userProfile, 'hearts.users', userClicker, true)
                 await updateEmbed(hearts_liked)
             }
+        }
+
+        if (button.id === 'comment') {
+            let comment_embed = new MessageEmbed()
+            .setTitle(`Managing Comments`)
+            .setColor('#fd5392')
+            .setFooter(userProfile.id)
+            .setTimestamp()
+
+            let commentButton = new MessageButton()
+            .setStyle('green')
+            .setID('comment_send')
+            .setEmoji('862302065321574410')
+            .setLabel('Comment')
+
+            let viewCommentButton = new MessageButton()
+            .setStyle('blurple')
+            .setID('view_comments')
+            .setEmoji('862302065321574410')
+            .setLabel('View Comments')
+        
+            await button.reply.send({embed: comment_embed, buttons: [viewCommentButton, commentButton]})
+        }
+
+        if (button.id === 'comment_send') {
+            client.channels.cache.get(button.channel.id).messages.fetch(button.message.id).then(async m => {
+                m.delete()
+            })
+
+            if (userProfile.id === userClicker.id) return button.reply.send('You cannot comment on your own profile!', true)
+
+            let comment_embed = new MessageEmbed()
+            .setTitle(`Commenting On ${userProfile.username}'s profile`)
+            .setColor('#fd5392')
+            .setFooter(userProfile.id)
+            .setTimestamp()
+
+            let NiceProfileOption = new MessageMenuOption()
+            .setLabel(`Nice Profile!`)
+            .setEmoji('👍')
+            .setValue('comment_niceprofile')
+
+            let CustomOption = new MessageMenuOption()
+            .setLabel(`Custom`)
+            .setEmoji('👍')
+            .setValue('comment_custom')
+    
+            let commentsMenu = new MessageMenu()
+            .setID('profileEditMenu')
+            .setPlaceholder('What would you like to comment?')
+            .setMaxValues(1)
+            .setMinValues(1)
+            .addOptions([NiceProfileOption, CustomOption])
+        
+            await button.reply.send({embed: comment_embed, component: new MessageActionRow().addComponent(commentsMenu), ephemeral: true})
         }
 
         if (button.id === 'reload') {

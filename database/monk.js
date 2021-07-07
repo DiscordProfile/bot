@@ -74,11 +74,17 @@ class Calls {
             },
             premium: {
                 status: false
+            },
+            settings: {
+                blocked: false,
+                admin: false,
+                staff: false
             }
         }))
     }
 
     static async updateUserPushOrPull(id, props, value, pop) {
+        console.log(pop)
         const collection = db.get('users')
         if (pop) {
             return (await collection.update({ id: id }, { $push: { [props]: value } }));

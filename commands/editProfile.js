@@ -6,6 +6,14 @@ exports.run = async (client, message, args) => {
 
     let userName = message.author.username
 
+    let userDB = await Calls.getUser(message.author.id)
+
+    let embedNoAccess = new MessageEmbed()
+    .setDescription(`❎ <@${message.author.id}> is blocked from having a profile`)
+    .setColor('RED')
+
+    if (userDB.settings && userDB.settings.blocked == true) return message.channel.send({embed: embedNoAccess})
+
     let profilePictureEdit = new MessageMenuOption()
         .setLabel(`Profile Picture`)
         .setEmoji('🖼️')
@@ -50,7 +58,7 @@ exports.run = async (client, message, args) => {
 
     let profileSocialsEdit = new MessageMenuOption()
         .setLabel(`${userName}'s Socials`)
-        .setEmoji('🔞')
+        .setEmoji('📸')
         .setValue('customization_profilesocial')
         .setDescription('Edit your socials (max 3)')
 
