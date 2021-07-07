@@ -6,11 +6,16 @@ exports.run = async (client, message, args) => {
 
     let embed = new MessageEmbed()
     .setAuthor('DiscordProfiles | Support', client.user.avatarURL())
-    .setDescription('[➡️ **Support Server**](https://discord.gg/YcBzGx26em)')
+    .setDescription('[**Support Server**](https://discord.gg/YcBzGx26em)')
     .setColor('#fd5392')
     .setTimestamp()
 
-    message.channel.send(embed)
+    let support = new MessageButton()
+    .setStyle('url')
+    .setURL('https://discord.gg/YcBzGx26em')
+    .setLabel('Join Support Server')
+
+    message.channel.send({ embed, button: support})
 };
 
 exports.help = {

@@ -10,7 +10,12 @@ exports.run = async (client, message, args) => {
     .setColor('#fd5392')
     .setTimestamp()
 
-    message.channel.send(embed)
+    let invite = new MessageButton()
+    .setStyle('url')
+    .setURL('https://discord.com/api/oauth2/authorize?client_id=861961021357948929&permissions=3694522065&scope=bot')
+    .setLabel('Invite Bot')
+
+    message.channel.send({ embed, button: invite})
 };
 
 exports.help = {

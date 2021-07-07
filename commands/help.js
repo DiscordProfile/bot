@@ -1,5 +1,6 @@
   
 const { MessageEmbed } = require('discord.js');
+const { MessageButton } = require('discord-buttons');
 const Calls = require('../database/monk');
 
 exports.run = async (client, message, args) => {
@@ -8,7 +9,7 @@ exports.run = async (client, message, args) => {
 
         client.commands.forEach(cmd => {
             let cmdinfo = cmd
-            allcmds+="`"+guild.guild_prefix+cmdinfo.help.name+" "+cmdinfo.help.usage+"` ~ "+cmdinfo.help.description+"\n"
+            allcmds+="`"+guild.guild_prefix+cmdinfo.help.name+"` ~ "+cmdinfo.help.description+"\n"
         })
 
         let embed = new MessageEmbed()
@@ -17,7 +18,17 @@ exports.run = async (client, message, args) => {
         .setDescription(allcmds)
         .setFooter(`To get info of each command you can do ${guild.guild_prefix}help [command]`)
 
-        if(!args[0])return message.channel.send(embed)
+        let invite = new MessageButton()
+        .setStyle('url')
+        .setURL('https://discord.com/api/oauth2/authorize?client_id=861961021357948929&permissions=3694522065&scope=bot')
+        .setLabel('Invite Bot')
+    
+        let support = new MessageButton()
+        .setStyle('url')
+        .setURL('https://discord.gg/YcBzGx26em')
+        .setLabel('Support Server')
+    
+        if(!args[0]) return message.channel.send({ embed, buttons: [invite, support]})
         else {
             let cmd = args[0]
             let command = client.commands.get(cmd)
