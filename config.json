@@ -1,6 +1,6 @@
 {
     "defaults": {
-        "prefix": "!",
+        "prefix": ">",
         "statusType": "COMPETING",
         "statusMessage": "love hearts"
     }

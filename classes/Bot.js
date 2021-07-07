@@ -1,14 +1,16 @@
 const { Client: DiscordClient, Collection } = require('discord.js');
 const path = require('path');
 const fs = require('fs').promises;
-const client = require('discord.js')
-const Logger = require('../utils/Logger.js')
+const client = require('discord.js');
+const chalk = require('chalk');
+const Logger = require('../utils/Logger.js');
 
 class Bot extends DiscordClient {
     constructor() {
         super({
             partials: ['CHANNEL', 'REACTION', 'MESSAGE', 'USER']
-        });        /**
+        }); 
+        /**
          * @type {Collection<string, {run: function(...args), help: { name:string, aliases: string[] }}>}
          */
         this.commands = new Collection();
@@ -40,10 +42,11 @@ class Bot extends DiscordClient {
                 /**
                  * @type {{run: function(...args), help: { name:string }}}
                 */
+
                 const command = require(path.join(filePath, file));
+                if(!command.help || !command.help.name) return Logger.error(`You must define the config in the command ${chalk.blue(file.split(".")[0])}`)
                 this.commands.set(command.help.name, command);
                 Logger.command(`${command.help.name}`);
-                
             }
         }
     }
@@ -60,7 +63,7 @@ class Bot extends DiscordClient {
                  */
                 const event = require(path.join(filePath, file));
                 this.on(file.split('.')[0], (...args) => event(this, ...args));
-                Logger.event(`Event - ${file.split('.')[0]}`);
+                Logger.event(`${file.split('.')[0]}`);
                 delete require.cache[require.resolve(path.join(filePath, file))];
             }
         }
