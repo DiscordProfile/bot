@@ -7,19 +7,19 @@ class Calls {
         return (await collection.insert(obj))
     }
 
-    static async removeGuild(id) {
+    static async removeGuild(guild_id) {
         const collection = db.get('guilds')
-        return (await collection.findOneAndDelete({ guild_id: id }))
+        return (await collection.findOneAndDelete({ guild_id }))
     }
 
     static async updateGuild(id, props, value) {
         const collection = db.get('guilds')
-        return (await collection.findOneAndUpdate({ id }, { $set: { [props]: value } }))
+        return (await collection.findOneAndUpdate({ guild_id }, { $set: { [props]: value } }))
     }
 
-    static async getGuild(id) {
+    static async getGuild(guild_id) {
         const collection = db.get('guilds')
-        return (await collection.findOne({ id }))
+        return (await collection.findOne({ guild_id }))
     }
 
     static async getUser(id) {
