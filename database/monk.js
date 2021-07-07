@@ -42,6 +42,11 @@ class Calls {
         return (await collection.findOneAndUpdate({ id }, { $set: { [props]: value } }))
     }
 
+    static async updateUserBatch(id, batch) {
+        const collection = db.get('users')
+        return (await collection.findOneAndUpdate({ id }, { $set: { comments: batch } }))
+    }
+
     static async insertUser(id) {
         const collection = db.get('users')
         return (await collection.insert({
@@ -52,6 +57,20 @@ class Calls {
             },
             hearts: {
                 users: []
+            },
+            comments: {
+                status: true,
+                comments: []
+            },
+            customization: {
+                profile_picture: '',
+                profile_quote: '',
+                profile_color: '',
+                profile_nickname: '',
+                profile_nationality: '',
+                profile_gender: '',
+                profile_age: '',
+                profile_social: '',
             },
             premium: {
                 status: false
