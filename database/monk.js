@@ -52,6 +52,9 @@ class Calls {
             },
             hearts: {
                 users: []
+            },
+            premium: {
+                status: false
             }
         }))
     }
