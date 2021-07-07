@@ -64,7 +64,7 @@ exports.run = async (client, message, args) => {
     let embed = new MessageEmbed()
         .setAuthor(`${message.author.username}'s profile`, message.author.displayAvatarURL())
         .setDescription(`Customizing <@${message.author.id}>.`)
-        .setColor('#88E595')
+        .setColor('#fd5392')
         .setFooter(message.author.id)
         .setTimestamp()
 

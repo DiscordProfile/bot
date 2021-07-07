@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
     .setDescription('Total amounts given.')
     .addField('❤️ Hearts', allHearts, true)
     .addField('👀 Views', allViews, true)
-    .setColor('#88E595')
+    .setColor('#fd5392')
     .setTimestamp()
 
     message.channel.send(embed)

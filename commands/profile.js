@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
     let embed = new MessageEmbed()
     .setAuthor(`${user.username}'s profile`, user.displayAvatarURL())
     .setDescription(`Viewing <@${user.id}>.`)
-    .setColor('#f7cb6b')
+    .setColor('#fd5392')
     .setFooter(user.id)
     .setTimestamp()
     if (userDB.views.total > 100) embed.addField('🔥 Trending', `This profile has over 100+ views!`)
