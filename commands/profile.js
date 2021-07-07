@@ -46,7 +46,7 @@ exports.run = async (client, message, args) => {
     .setStyle('gray')
     .setID('reload')
     .setEmoji('861934606956888064')
-    message.channel.send({embed, buttons: [hearts, comment, views, reload]})
+    message.channel.send({embed, buttons: [hearts, views, reload]})
 };
 
 exports.help = {
