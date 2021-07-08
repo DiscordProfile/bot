@@ -140,7 +140,7 @@ module.exports = async (client, menu) => {
         let comment_embed = new MessageEmbed()
         .setTitle(`Comment Sent!`)
         .setColor('#fd5392')
-        .setDescription(`<:comment:862302065321574410> You commented: \`${value}\``)
+        .setDescription(`<:comment:862302065321574410> <@${menu.clicker.user.id}> commented: \`${value}\``)
         .setTimestamp()
 
         client.channels.cache.get(menu.channel.id).messages.fetch(menu.message.id).then(async m => {
