@@ -111,29 +111,38 @@ module.exports = async (client, menu) => {
         }
     }
     customise()
+    if (menu?.message?.embeds[0]?.footer?.text != String(menu.clicker.user.id)) return;
 
     if (menu.values[0] == 'comment_niceprofile') {
+        await commentSend('👍 Nice Profile!')
+    }
 
-        console.log(menu.message.embeds[0])
+    if (menu.values[0] == 'comment_helpful') {
+        await commentSend('❤️ Helpful!')
+    }
 
-        let profileDB = await Calls.getUser(menu?.message?.embeds[0]?.footer?.text)
-
+    async function commentSend(value) {
+        let profileDB = await Calls.getUser(menu?.message?.embeds[0]?.author?.name)
         let length = 16;
         let id = crypto.randomBytes(length).toString("base64");
+
+        const secondsSinceEpoch = Math.round(Date.now() / 1000)
 
         await Calls.updateUserPushOrPull(profileDB.id, 'comments.comments', {
             uuid: id,
             commenter: menu.clicker.user.id,
-            value: '👍 Nice Profile!'
+            value: value,
+            epoch_timestamp: secondsSinceEpoch
         }, true)
 
         let comment_embed = new MessageEmbed()
         .setTitle(`Comment Sent!`)
         .setColor('#fd5392')
-        .setDescription(`<:comment:862302065321574410> You commented: \`👍 Nice Profile!\``)
+        .setDescription(`<:comment:862302065321574410> You commented: \`${value}\``)
         .setTimestamp()
 
         client.channels.cache.get(menu.channel.id).messages.fetch(menu.message.id).then(async m => {
+            m.delete()
             m.channel.send({
                 embed: comment_embed,
                 components: []

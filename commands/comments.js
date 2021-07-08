@@ -17,9 +17,12 @@ exports.run = async (client, message, args) => {
         .setColor(userDB.customization.profile_color || '#fd5392')
         .setFooter(user.id)
         .setTimestamp()
+        if (userDB.comments.comments.length == 0) embed.addField('No Comments!', `This user has no comments.`, true)
 
-        userDB.comments.comments.forEach(comment => {
-            embed.addField(comment.value, `by <@${comment.commenter}>`, true)
+        let reversedComments = userDB.comments.comments.reverse()
+
+        reversedComments.forEach(comment => {
+            embed.addField(comment.value, `by <@${comment.commenter}>\n<t:${comment.epoch_timestamp}:R>`, true)
         })
 
     message.channel.send(embed)

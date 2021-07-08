@@ -18,13 +18,20 @@ exports.run = async (client, message, args) => {
     if (userDB.settings && userDB.settings.blocked == true) return message.channel.send({embed: embedNoAccess})
 
     if (message.author.id !== userDB.id) await Calls.updateUser(user.id, 'views.total', userDB.views.total + 1)
-
+    
+        const slicedArray = userDB.comments.comments.slice(0, 3);
+        let commentsText = ``
+        slicedArray.forEach(comment => {
+            commentsText += `${comment.value} ~ <@${comment.commenter}> ~ <t:${comment.epoch_timestamp}:R>\n`
+        })
+        console.log(slicedArray)
         let embed = new MessageEmbed()
         .setAuthor(`${userDB.customization.profile_nickname || user.username}'s profile`, user.displayAvatarURL())
         .setDescription(`Viewing <@${user.id}>.`)
         .setColor(userDB.customization.profile_color || '#fd5392')
         .setFooter(user.id)
         .setTimestamp()
+        if (userDB.comments.comments.length > 0) embed.addField('Recent Comments', commentsText)
         userDB.customization.profile_quote ? embed.addField('✏️ Quote', userDB.customization.profile_quote ) : ''
         // .addField('Under beta', 'The bot is currently in beta. Report bugs and feature requests here: https://discord.gg/aaXK6FFKhg')
         if (userDB.views.total > 100) embed.addField('🔥 Trending', `This profile has over 100+ views!`)

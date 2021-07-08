@@ -38,7 +38,7 @@ module.exports = async (client, button) => {
             .setLabel(userProfileDB.views.total + ' views')
             .setDisabled()
 
-        let comments = new MessageButton()
+        let commentsBTN = new MessageButton()
             .setStyle('blurple')
             .setID('comment')
             .setEmoji('💬')
@@ -79,12 +79,12 @@ module.exports = async (client, button) => {
 
                     m.edit({
                         embed: button.message.embeds[0],
-                        buttons: [type, views]
+                        buttons: [type, commentsBTN, views]
                     })
                     await delay(2500)
                     m.edit({
                         embed: button.message.embeds[0],
-                        buttons: [hearts, views, reload]
+                        buttons: [hearts, commentsBTN, views, reload]
                     }).then(r => resolve())
                 })
             })
@@ -138,9 +138,11 @@ module.exports = async (client, button) => {
             if (userProfile.id === userClicker.id) return button.reply.send('You cannot comment on your own profile!', true)
 
             let comment_embed = new MessageEmbed()
-            .setTitle(`Commenting On ${userProfile.username}'s profile`)
+            .setAuthor(userProfile.id)
+            .setTitle(`${userClicker.user.username} is commenting on ${userProfile.username}'s profile`)
             .setColor('#fd5392')
-            .setFooter(userProfile.id)
+            .setDescription('*Only pre-made comments are allowed for now.*')
+            .setFooter(userClicker.id)
             .setTimestamp()
 
             let NiceProfileOption = new MessageMenuOption()
@@ -148,19 +150,40 @@ module.exports = async (client, button) => {
             .setEmoji('👍')
             .setValue('comment_niceprofile')
 
-            let CustomOption = new MessageMenuOption()
-            .setLabel(`Custom`)
-            .setEmoji('👍')
-            .setValue('comment_custom')
+            let HelpfulOption = new MessageMenuOption()
+            .setLabel(`Helpful`)
+            .setEmoji('❤️')
+            .setValue('comment_helpful')
     
             let commentsMenu = new MessageMenu()
             .setID('profileEditMenu')
             .setPlaceholder('What would you like to comment?')
             .setMaxValues(1)
             .setMinValues(1)
-            .addOptions([NiceProfileOption, CustomOption])
+            .addOptions([NiceProfileOption, HelpfulOption])
         
-            await button.reply.send({embed: comment_embed, component: new MessageActionRow().addComponent(commentsMenu), ephemeral: true})
+            await button.reply.send({embed: comment_embed, component: new MessageActionRow().addComponent(commentsMenu)})
+        }
+
+        if (button.id === 'view_comments') {
+            client.channels.cache.get(button.channel.id).messages.fetch(button.message.id).then(async m => {
+                m.delete()
+            })
+            let userDB = await Calls.getUser(userProfile.id)
+
+            let embed = new MessageEmbed()
+            .setAuthor(`${userDB.customization.profile_nickname || userProfile.username}'s comments`, userProfile.displayAvatarURL())
+            .setDescription(`Viewing <@${userProfile.id}>.`)
+            .setColor(userDB.customization.profile_color || '#fd5392')
+            .setFooter(userProfile.id)
+            .setTimestamp()
+            if (userDB.comments.comments.length == 0) embed.addField('No Comments!', `This user has no comments.`, true)
+
+            userDB.comments.comments.forEach(comment => {
+                embed.addField(comment.value, `by <@${comment.commenter}>`, true)
+            })
+    
+            await button.reply.send({embed: embed, ephemeral: true})
         }
 
         if (button.id === 'reload') {
@@ -169,12 +192,12 @@ module.exports = async (client, button) => {
             client.channels.cache.get(button.channel.id).messages.fetch(button.message.id).then(async m => {
                 m.edit({
                     embed: button.message.embeds[0],
-                    buttons: [hearts, views, reloading]
+                    buttons: [reloading]
                 })
                 await delay(2500)
                 m.edit({
                     embed: button.message.embeds[0],
-                    buttons: [hearts, views, reload]
+                    buttons: [hearts, commentsBTN, views, reload]
                 })
             })
         }
