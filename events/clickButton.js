@@ -11,6 +11,7 @@ module.exports = async (client, button) => {
         const userClicker = button.clicker;
 
         let heartUsers = await userProfileDB.hearts.users
+        let comment_users = userProfileDB.comments.comments
 
         let hearts = new MessageButton()
             .setStyle('gray')
@@ -36,6 +37,12 @@ module.exports = async (client, button) => {
             .setEmoji('👀')
             .setLabel(userProfileDB.views.total + ' views')
             .setDisabled()
+
+        let commentsBTN = new MessageButton()
+            .setStyle('blurple')
+            .setID('comment')
+            .setEmoji('💬')
+            .setLabel(await comment_users.length)
 
         let reload = new MessageButton()
             .setStyle('gray')
@@ -72,12 +79,12 @@ module.exports = async (client, button) => {
 
                     m.edit({
                         embed: button.message.embeds[0],
-                        buttons: [type, views]
+                        buttons: [type, commentsBTN, views]
                     })
                     await delay(2500)
                     m.edit({
                         embed: button.message.embeds[0],
-                        buttons: [hearts, views, reload]
+                        buttons: [hearts, commentsBTN, views, reload]
                     }).then(r => resolve())
                 })
             })
@@ -101,18 +108,98 @@ module.exports = async (client, button) => {
             }
         }
 
+        if (button.id === 'comment') {
+            let comment_embed = new MessageEmbed()
+            .setTitle(`Managing Comments`)
+            .setColor('#fd5392')
+            .setFooter(userProfile.id)
+            .setTimestamp()
+
+            let commentButton = new MessageButton()
+            .setStyle('green')
+            .setID('comment_send')
+            .setEmoji('862302065321574410')
+            .setLabel('Comment')
+
+            let viewCommentButton = new MessageButton()
+            .setStyle('blurple')
+            .setID('view_comments')
+            .setEmoji('862302065321574410')
+            .setLabel('View Comments')
+        
+            await button.reply.send({embed: comment_embed, buttons: [viewCommentButton, commentButton]})
+        }
+
+        if (button.id === 'comment_send') {
+            client.channels.cache.get(button.channel.id).messages.fetch(button.message.id).then(async m => {
+                m.delete()
+            })
+
+            if (userProfile.id === userClicker.id) return button.reply.send('You cannot comment on your own profile!', true)
+
+            let comment_embed = new MessageEmbed()
+            .setAuthor(userProfile.id)
+            .setTitle(`${userClicker.user.username} is commenting on ${userProfile.username}'s profile`)
+            .setColor('#fd5392')
+            .setDescription('*Only pre-made comments are allowed for now.*')
+            .setFooter(userClicker.id)
+            .setTimestamp()
+
+            let NiceProfileOption = new MessageMenuOption()
+            .setLabel(`Nice Profile!`)
+            .setEmoji('👍')
+            .setValue('comment_niceprofile')
+
+            let HelpfulOption = new MessageMenuOption()
+            .setLabel(`Helpful`)
+            .setEmoji('❤️')
+            .setValue('comment_helpful')
+    
+            let commentsMenu = new MessageMenu()
+            .setID('profileEditMenu')
+            .setPlaceholder('What would you like to comment?')
+            .setMaxValues(1)
+            .setMinValues(1)
+            .addOptions([NiceProfileOption, HelpfulOption])
+        
+            await button.reply.send({embed: comment_embed, component: new MessageActionRow().addComponent(commentsMenu)})
+        }
+
+        if (button.id === 'view_comments') {
+            client.channels.cache.get(button.channel.id).messages.fetch(button.message.id).then(async m => {
+                m.delete()
+            })
+            let userDB = await Calls.getUser(userProfile.id)
+
+            let embed = new MessageEmbed()
+            .setAuthor(`${userDB.customization.profile_nickname || userProfile.username}'s comments`, userProfile.displayAvatarURL())
+            .setDescription(`Viewing <@${userProfile.id}>.`)
+            .setColor(userDB.customization.profile_color || '#fd5392')
+            .setFooter(userProfile.id)
+            .setTimestamp()
+            if (userDB.comments.comments.length == 0) embed.addField('No Comments!', `This user has no comments.`, true)
+
+            let reversedComments = userDB.comments.comments.reverse()
+
+            reversedComments.forEach(comment => {
+                embed.addField(comment.value, `by <@${comment.commenter}>\n<t:${comment.epoch_timestamp}:R>`, true)
+            })
+    
+            await button.reply.send({embed: embed, ephemeral: true})
+        }
+
         if (button.id === 'reload') {
             await button.reply.defer()
 
             client.channels.cache.get(button.channel.id).messages.fetch(button.message.id).then(async m => {
                 m.edit({
                     embed: button.message.embeds[0],
-                    buttons: [hearts, views, reloading]
+                    buttons: [reloading]
                 })
                 await delay(2500)
                 m.edit({
                     embed: button.message.embeds[0],
-                    buttons: [hearts, views, reload]
+                    buttons: [hearts, commentsBTN, views, reload]
                 })
             })
         }

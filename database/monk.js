@@ -74,6 +74,11 @@ class Calls {
             },
             premium: {
                 status: false
+            },
+            settings: {
+                blocked: false,
+                admin: false,
+                staff: false
             }
         }))
     }

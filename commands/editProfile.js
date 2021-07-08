@@ -6,52 +6,60 @@ exports.run = async (client, message, args) => {
 
     let userName = message.author.username
 
+    let userDB = await Calls.getUser(message.author.id)
+
+    let embedNoAccess = new MessageEmbed()
+    .setDescription(`❎ <@${message.author.id}> is blocked from having a profile`)
+    .setColor('RED')
+
+    if (userDB.settings && userDB.settings.blocked == true) return message.channel.send({embed: embedNoAccess})
+
     let profilePictureEdit = new MessageMenuOption()
         .setLabel(`Profile Picture`)
         .setEmoji('🖼️')
-        .setValue('customization_profilepicture')
+        .setValue('profile_picture')
         .setDescription('Edit your profile picture')
 
     let profileQuoteEdit = new MessageMenuOption()
         .setLabel(`Profile Quote`)
         .setEmoji('✏️')
-        .setValue('customization_profilequote')
+        .setValue('profile_quote')
         .setDescription('Edit your profile quote')
 
     let profileColorEdit = new MessageMenuOption()
         .setLabel('Profile Color')
         .setEmoji('🎨')
-        .setValue('customization_profilecolor')
+        .setValue('profile_color')
         .setDescription('Edit your profile color')
 
     let profileNickNameEdit = new MessageMenuOption()
         .setLabel(`${userName}'s Nickname`)
         .setEmoji('📛')
-        .setValue('customization_profilenickname')
+        .setValue('profile_nickname')
         .setDescription('Edit your nickname')
 
     let profileNationalityEdit = new MessageMenuOption()
         .setLabel(`${userName}'s Nationality`)
         .setEmoji('🏳️')
-        .setValue('customization_profilenationality')
+        .setValue('profile_nationality')
         .setDescription('Edit your nationality')
 
     let profileGenderEdit = new MessageMenuOption()
         .setLabel(`${userName}'s Gender`)
         .setEmoji('🧑‍🤝‍🧑')
-        .setValue('customization_profilegender')
+        .setValue('profile_gender')
         .setDescription('Edit your gender')
 
     let profileAgeEdit = new MessageMenuOption()
         .setLabel(`${userName}'s Age`)
         .setEmoji('🔞')
-        .setValue('customization_profileage')
+        .setValue('profile_age')
         .setDescription('Edit your age')
 
     let profileSocialsEdit = new MessageMenuOption()
         .setLabel(`${userName}'s Socials`)
-        .setEmoji('🔞')
-        .setValue('customization_profilesocial')
+        .setEmoji('📸')
+        .setValue('profile_social')
         .setDescription('Edit your socials (max 3)')
 
     let selectProfileEdit = new MessageMenu()

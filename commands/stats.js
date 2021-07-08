@@ -15,8 +15,8 @@ exports.run = async (client, message, args) => {
     })
 
     let embed = new MessageEmbed()
-    .setTitle('Global Statistics')
-    .setDescription('Total amounts given.')
+    .setTitle('Global Bot Statistics')
+    .setDescription('Total amounts given for the whole of the bot.')
     .addField('❤️ Hearts', allHearts, true)
     .addField('👀 Views', allViews, true)
     .setColor('#fd5392')
