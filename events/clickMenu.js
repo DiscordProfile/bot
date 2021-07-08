@@ -26,8 +26,10 @@ module.exports = async (client, menu) => {
             `Age: ${userDB.customization ? userDB.customization.profileage : "?"}`
         ].join("\n");
 
-        let cId = String(menu.values[0]).split("_")[1]
-        let needInput = ["profilepicture", "profilequote", "profilecolor", "profilenickname", "profilenationality", "profileage", "profilesocial"] //yes
+        let cId = String(menu.values[0])
+        let needInput = ["profile_picture", "profile_quote", "profile_color", "profile_nickname", "profile_nationality", "profil_eage", "profile_social"] //yes
+
+        console.log(cId)
 
         if(needInput.some(n => n == cId)) {
             let waitingForInput = await menu.channel.send("Waiting for input...")
@@ -38,7 +40,7 @@ module.exports = async (client, menu) => {
             let finalInput = input ? input.first() : ""; 
 
             switch (cId) {
-                case "profilepicture": {
+                case "profile_picture": {
                     let finalUrl = ifUrl(finalInput.content) ? finalInput.content : menu.clicker.user.avatarURL({dynamic: true}) 
                     await Calls.updateUser(userId, `customization.${cId}`, finalUrl)
 
@@ -47,7 +49,7 @@ module.exports = async (client, menu) => {
                     }; 
                     break;
                 } 
-                case "profilecolor": {
+                case "profile_color": {
                     if (ifUrl(finalInput.content)) return;
                     if (!isHexValid(finalInput.content)) return; 
 
@@ -57,7 +59,7 @@ module.exports = async (client, menu) => {
 
                     break; 
                 }
-                case "profilenickname": {
+                case "profile_nickname": {
                     if (ifUrl(finalInput.content)) return;
                     await Calls.updateUser(userId, `customization.${cId}`, finalInput.content)
 
@@ -65,7 +67,7 @@ module.exports = async (client, menu) => {
 
                     break;
                 }
-                case "profilequote": {
+                case "profile_quote": {
                     if (ifUrl(finalInput.content)) return;
                     console.log(finalInput.content.length )
                     if (finalInput.content.length > 20) return;
@@ -88,7 +90,7 @@ module.exports = async (client, menu) => {
 
             menu.message.edit(menu.message.embeds[0])
         } else {
-            if(cId == "profilegender") {
+            if(cId == "profile_gender") {
                 let selectGender = await menu.channel.send(`Select gender.`, {
                     components: new MessageActionRow().addComponents([
                         new MessageButton().setLabel("Man").setID(`customizationSelect_profilegender:man`).setStyle("blurple"),

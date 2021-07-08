@@ -9,6 +9,7 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "crypto": "^1.0.1",
     "dateformat": "^4.5.1",
     "discord-buttons": "^4.0.0",
@@ -18,6 +19,7 @@
     "moment": "^2.29.1",
     "monk": "^7.3.4",
     "ms": "^2.1.2",
+    "node-cron": "^3.0.0",
     "nodemon": "^2.0.4",
     "pretty-ms": "^7.0.1"
   },

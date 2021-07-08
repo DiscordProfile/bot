@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
 
     if (message.author.id !== userDB.id) await Calls.updateUser(user.id, 'views.total', userDB.views.total + 1)
     
-        const slicedArray = userDB.comments.comments.slice(0, 3);
+        const slicedArray = userDB.comments.comments.slice(0, 3).reverse();
         let commentsText = ``
         slicedArray.forEach(comment => {
             commentsText += `${comment.value} ~ <@${comment.commenter}> ~ <t:${comment.epoch_timestamp}:R>\n`
