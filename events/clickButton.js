@@ -185,7 +185,7 @@ module.exports = async (client, button) => {
                 embed.addField(comment.value, `by <@${comment.commenter}>\n<t:${comment.epoch_timestamp}:R>`, true)
             })
     
-            await button.reply.send({embed: embed, ephemeral: true})
+            await button.reply.send({embed: embed})
         }
 
         if (button.id === 'reload') {
