@@ -56,6 +56,7 @@ module.exports = async (client, menu) => {
                     await Calls.updateUser(userId, `customization.${cId}`, finalInput.content)
 
                     menu.message.embeds[0]["color"] = finalInput.content;
+                    menu.message.embeds[0]["description"] = "Updated Profile Color.";
 
                     break; 
                 }
@@ -81,7 +82,6 @@ module.exports = async (client, menu) => {
                     await Calls.updateUser(userId, `customization.${cId}`, finalInput.content)
 
                     userDB = await Calls.getUser(userId)
-                    menu.message.embeds[0]["description"] = profileEditInfoExample; 
                     break;
                 }
             }
