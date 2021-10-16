@@ -27,7 +27,7 @@ module.exports = async (client, menu) => {
         ].join("\n");
 
         let cId = String(menu.values[0])
-        let needInput = ["profile_picture", "profile_quote", "profile_color", "profile_nickname", "profile_nationality", "profil_eage", "profile_social"] //yes
+        let needInput = ["profile_picture", "profile_quote", "profile_color", "profile_nickname", "profile_nationality", "profile_age", "profile_social"] //yes
 
         console.log(cId)
 
